@@ -1,12 +1,15 @@
 package typesafe.utrecht.untyped
 
 import akka.actor.Actor
+import akka.actor.ActorContext
 import akka.actor.ActorLogging
 import akka.actor.ActorRef
 import akka.actor.Props
 import akka.actor.Terminated
 
-class Chat extends Actor with ActorLogging {
+class Chat(chatRoomCreator: ActorContext => ActorRef)
+    extends Actor
+    with ActorLogging {
 
   private var rooms = Map.empty[String, ActorRef]
 
@@ -16,7 +19,7 @@ class Chat extends Actor with ActorLogging {
 
     case Chat.CreateRoom(name) =>
       log.info(s"Creating new room $name")
-      val chatRoomRef = context.actorOf(ChatRoom.props())
+      val chatRoomRef = chatRoomCreator(context)
       rooms += name -> chatRoomRef
       context.watch(chatRoomRef)
 
@@ -43,7 +46,11 @@ class Chat extends Actor with ActorLogging {
 
 object Chat {
 
-  def props() = Props(new Chat())
+  def props(chatRoomCreator: ActorContext => ActorRef): Props = {
+    Props(new Chat(chatRoomCreator))
+  }
+
+  def props(): Props = props(_.actorOf(ChatRoom.props()))
 
   case class CreateRoom(name: String)
 

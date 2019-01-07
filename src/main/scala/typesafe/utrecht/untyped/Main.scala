@@ -34,7 +34,9 @@ object Main extends App {
   mikesSession.foreach { session =>
     session.session ! Session.SendMessage("Welcome to Typesafe Utrecht")
     session.session ! Session.SendMessage(
-      "Our next topic is how to save the world with type safety")
+      "Our next topic is how to save the world with type safety"
+    )
+    session.session ! Session.Close
   }
 
   Thread.sleep(1000)

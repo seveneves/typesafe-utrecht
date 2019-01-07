@@ -1,6 +1,7 @@
 package typesafe.utrecht.untyped
 
-import akka.actor.{Actor, Props}
+import akka.actor.Actor
+import akka.actor.Props
 
 class ConsoleMessageHandler(username: String, chatRoom: String) extends Actor {
   override def receive: Receive = {
@@ -9,5 +10,7 @@ class ConsoleMessageHandler(username: String, chatRoom: String) extends Actor {
 }
 
 object ConsoleMessageHandler {
-  def props(username: String, chatRoom: String) = Props(new ConsoleMessageHandler(username, chatRoom))
+
+  def props(username: String, chatRoom: String) =
+    Props(new ConsoleMessageHandler(username, chatRoom))
 }

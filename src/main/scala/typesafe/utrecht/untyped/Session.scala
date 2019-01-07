@@ -8,17 +8,18 @@ class Session(userName: String, chatRoom: ActorRef) extends Actor {
   override def receive: Receive = {
     case Session.SendMessage(message) =>
       chatRoom ! ChatRoom.SendMessage(userName, message)
-    case Session.Exit =>
+    case Session.Close =>
       chatRoom ! ChatRoom.UserClosedRoom(userName)
   }
 }
 
 object Session {
 
-  def props(username: String, charRoom: ActorRef) =
+  def props(username: String, charRoom: ActorRef) = {
     Props(new Session(username, charRoom))
+  }
 
-  case object Exit
+  case object Close
 
   case class SendMessage(message: String)
 }
