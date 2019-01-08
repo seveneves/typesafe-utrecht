@@ -2,4 +2,4 @@
 
 #### Actor message flow overview
 
-![Flow image](./flow.svg?sanitize=true)
+![Flow image](./flow.svg)
